@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>에디터 만들기</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <textarea id="editor" cols="30" rows="10" 
+        v-model="editor_content" 
+        @keypress="getTyped"  
+        @keydown.alt.90="getUndo" 
+        @keydown.alt.88="getRedo"
+    >
+    </textarea>
+    <ol>
+        <li v-for="data in undo_list">{{ data }}</li>
+    </ol>
+</div>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="./js/stack.js"></script>
+<script>
+    const undo = new Stack()
+    const redo = new Stack()
+
+    const vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                editor_content : '',
+                undo_list : undo.data,
+                redo_list : redo.data,
+            }
+        },
+        methods: {
+            getTyped: _.debounce(
+                function () {
+                    undo.push(this.editor_content)
+                },
+                500
+            ),
+            getUndo: function () {
+                redo.push(undo.pop())
+                this.editor_content = undo.peek
+            },
+            getRedo: function () {
+                undo.push(redo.pop())
+                this.editor_content = undo.peek
+            },
+        },
+    })
+</script>
+</body>
+</html>
