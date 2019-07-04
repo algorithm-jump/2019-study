@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Queue</title>
+</head>
+<body>
+<h1>입력FORM</h1>
+<input type="text" id="textData" >
+<input type="number" id="priorityData">
+<button type="submit" onclick="pushData()">입력</button>
+
+<h1>출력내용</h1>
+<div id="print"></div>
+</body>
+</html>
+
+<script>
+    var data = new Object();
+    var arrText = new Array();
+    var arrPrt = new Array();
+    var inputTxt = document.getElementById('textData');
+    var inputPrt = document.getElementById('priorityData');
+    var prints = document.getElementById('print');
+
+    // function pushData() {
+    //     data.text = inputTxt.value;
+    //     data.priority = inputPrt.value;
+    // }
+    function pushData() {
+        arrText.push(inputTxt.value);
+        arrPrt.push(inputPrt.value);
+    }
+
+    setInterval(() => {
+        if(arrText[0] != undefined) {
+            prints.innerText += arrPrt[0] + "__" + arrText[0] + "\n";
+            arrText.pop();
+            arrPrt.pop();
+        }
+    }, 500);
+
+
+</script>
