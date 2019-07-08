@@ -9,24 +9,25 @@
 <input type="text" id="textData" >
 <input type="number" id="priorityData">
 <button type="submit" onclick="pushData()">입력</button>
+<button type="button" onclick="arrange()">재정렬</button>
 
 <h1>출력내용</h1>
 <div id="print"></div>
+<h1>정렬</h1>
+<div id="arrange"></div>
 </body>
 </html>
 
 <script>
-    var data = new Object();
     var arrText = new Array();
     var arrPrt = new Array();
     var inputTxt = document.getElementById('textData');
     var inputPrt = document.getElementById('priorityData');
+    var tempTxt = new Array();
+    var tempPrt = new Array();
     var prints = document.getElementById('print');
+    var arranges = document.getElementById('arrange');
 
-    // function pushData() {
-    //     data.text = inputTxt.value;
-    //     data.priority = inputPrt.value;
-    // }
     function pushData() {
         arrText.push(inputTxt.value);
         arrPrt.push(inputPrt.value);
@@ -34,11 +35,51 @@
 
     setInterval(() => {
         if(arrText[0] != undefined) {
-            prints.innerText += arrPrt[0] + "__" + arrText[0] + "\n";
-            arrText.pop();
-            arrPrt.pop();
+            prints.innerText += arrPrt[0] + "_" + arrText[0] + "\n";
+            console.log(arrText);
+            tempTxt.push(arrText.pop());
+            tempPrt.push(arrPrt.pop());
         }
-    }, 500);
+    }, 2000);
+
+    function arrange() {
+        for(var i = 0; i < tempPrt.length-1; i++) {
+            for(var j = i+1; j < tempPrt.length; j++) {
+                if (tempPrt[i] < tempPrt[j]) {
+                    var tempT;
+                    var tempP;
+
+                    tempP = tempPrt[j];
+                    tempPrt[j] = tempPrt[i];
+                    tempPrt[i] = tempP;
+
+                    tempT = tempTxt[j];
+                    tempTxt[j] = tempTxt[i];
+                    tempTxt[i] = tempT;
+                }
+            }
+        }
+
+        var index = 0;
+        const arrangeInterval = setInterval(() =>  {
+            arranges.innerText += tempPrt[index] + "_" + tempTxt[index] + "\n";
+            index++;
+
+            if(index === tempTxt.length) {
+                clearInterval(arrangeInterval);
+            }
+        }, 1000);
+
+
+    }
+
+
+
+
+    var seconds = 0;
+    // setInterval(() => {
+    //     console.log(seconds++);
+    // }, 1000);
 
 
 </script>
